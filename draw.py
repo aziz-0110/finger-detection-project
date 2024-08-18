@@ -59,22 +59,23 @@ while True:
     cv2.imshow("aa", comb_frame)
 
     key = cv2.waitKey(1)
-    if key == ord("j"):
-        rec = drawing(canvas, 1)
-        canvas[ :, :, :3] = rec
-    if key == ord("k"):
-        cir = drawing(canvas, 2)
-        canvas[ :, :, :3] = cir
-    if key == ord("l"):
-        tri = drawing(canvas, 3)
-        canvas[ :, :, :3] = tri
-    if key == ord("s"):
-        cv2.imwrite("ob.jpg", canvas)
-    if key == ord("w"):
+
+    key_actions = {
+        ord("j"): lambda: drawing(canvas, 1),
+        ord("k"): lambda: drawing(canvas, 2),
+        ord("l"): lambda: drawing(canvas, 3),
+        ord("s"): lambda: cv2.imwrite("result.jpg", canvas),
+        ord("w"): lambda: (None, None, None),
+    }
+
+    if key in key_actions:
+        action = key_actions[key]()
+        if key in [ord("j"), ord("k"), ord("l")]:
+            canvas[ :, :, :3] = action
+
+    if key == ord("c"):
         canvas, prev_x, prev_y = None, None, None
     if key == ord("q"): break
-
-
 
 cap.release()
 cv2.destroyAllWindows()
